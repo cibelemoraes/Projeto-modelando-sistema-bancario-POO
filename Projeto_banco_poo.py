@@ -77,41 +77,6 @@ class Conta:
             print("\n@@@ Operação falhou! Ovalor informado é invalido.@@@")
             
         return True
-    
-class ContaCorrente(Conta):
-    def __init__(self, numero, cliente, limite=500, limite_saques=3):
-        super().__init__(numero, cliente)
-        self.limite = limite
-        self.limite_saques = limite_saques
-        
-    def sacar(self, valor):
-        
-        numero_saques = len(
-    [transacao for transacao in self.historico.transacoes if transacao['tipo']== Saque.__name__]
-        
-
-    excedeu_limite = valor > self.limite
-    execedeu_saques = numero_saques >= self.limite_saques
-    
-    if excedeu_limite:
-        print("\n@@@Operação Falhou! O valor do Saque excedeu o limite. @@@")
-        
-    elif execedeu_saques:
-        print("\n@@@Operação Falhou! Você excedeu o numero de saques diarios. @@@")
-        
-    else:
-         return super()sacar(valor)
-    
-    return False
-    
-    
-    def __str__(self):
-        return f"""\
-            agencia:\t{self.agencia}
-            c/c:\t\t{self.numero}
-            Titular:\t{self.cliente.nome}
-            """
-
 
 class Historico:
     def __init__(self):
@@ -157,5 +122,101 @@ class Saque(Transacao):
                 
 
 class Deposito(Transacao):
+    def __init__(self, valor):
+        self._valor = valor
+        
+        @property
+        def valor(self):
+            return self._valor
+            
+        def registrar(self, conta):
+            sucesso_transacao = conta.depositar(self.valor)
+            
+            if sucesso_transacao:
+                conta.historico.adicionar_transacao(self)
+
+#parte dois do desafio
+def menu():
+    menu = """\n
+    ============== MENU ================
+    [d]\tDepositar
+    [s]\tSacar
+    [e]\tExtrato
+    [nc]\tNova conta
+    [lc]\tListar Contas
+    [nu]\tNovo Usuário
+    [q]\tSair
+    =>"""
+    return input(textwrap.dedent(menu))
+
+
+
+def main():
+    clientes = []
+    contas = []
+    
+    while True:
+        opcao = menu()
+        
+        if opcao == "d":
+            Depositar(clientes)
+            
+        elif opcao == "s":
+            Sacar(clientes)
+            
+        elif opcao == "e":
+            Exibir_extrato(clientes)
+            
+        elif opcao == "nu":
+            criar_clientes(clientes)  
+            
+        elif opcao == "nc" :
+            numero_conta = len(contas) + 1
+            criar_conta(numero_conta, clientes, contas)
+            
+        elif opcao == "lc":
+            listar_contas(contas)
+            
+        elif
+                    
+          
+            
+        
+
+class ContaCorrente(Conta):
     
 
+    def __init__(self, numero, cliente, limite=500, limite_saques=3):
+        super().__init__(numero, cliente)
+        self.limite = limite
+        self.limite_saques = limite_saques
+        
+    def sacar(self, valor):
+        
+        numero_saques = len(
+    [transacao for transacao in self.historico.transacoes if transacao['tipo']== Saque.__name__]
+        
+
+    excedeu_limite = valor > self.limite
+    execedeu_saques = numero_saques >= self.limite_saques
+    
+    if excedeu_limite:
+        print("\n@@@Operação Falhou! O valor do Saque excedeu o limite. @@@")
+        
+    elif execedeu_saques:
+        print("\n@@@Operação Falhou! Você excedeu o numero de saques diarios. @@@")
+        
+    else:
+         return super()sacar(valor)
+    
+    return False
+    
+    
+    def __str__(self):
+        return f"""\
+            agencia:\t{self.agencia}
+            c/c:\t\t{self.numero}
+            Titular:\t{self.cliente.nome}
+            """
+    return True
+    
